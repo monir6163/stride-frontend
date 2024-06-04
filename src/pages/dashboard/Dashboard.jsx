@@ -35,6 +35,12 @@ const Dashboard = () => {
       >
         Edit Profile
       </Link>
+      <Link
+        to={`/dashboard/profile/change-password/${userInfo?._id || user?.uid}`}
+        className="btn btn-primary p-2 m-2"
+      >
+        Change Password
+      </Link>
     </div>
   );
 };

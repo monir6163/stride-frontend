@@ -13,6 +13,7 @@ import Login from "../pages/Login";
 import Registration from "../pages/Registration";
 import AddDogs from "../pages/dashboard/AddDogs";
 import AllDogs from "../pages/dashboard/AllDogs";
+import ChangePassword from "../pages/dashboard/ChangePassword";
 import Dashboard from "../pages/dashboard/Dashboard";
 import DetailsDashboard from "../pages/dashboard/DogDetails";
 import EditDogs from "../pages/dashboard/EditDogs";
@@ -134,6 +135,18 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <EditProfile />
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(
+            `https://stride-backend-kappa.vercel.app/api/v1/user/userId?id=${params?.id}`
+          ),
+      },
+      {
+        path: "/dashboard/profile/change-password/:id",
+        element: (
+          <PrivateRoute>
+            <ChangePassword />
           </PrivateRoute>
         ),
         loader: ({ params }) =>

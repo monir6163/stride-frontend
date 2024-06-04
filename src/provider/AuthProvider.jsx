@@ -9,6 +9,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -87,6 +88,44 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const changePassword = async (id, newPassword) => {
+    const auth = getAuth();
+
+    const user = auth.currentUser;
+
+    if (!user) {
+      return toast.error("User not found");
+    }
+
+    updatePassword(user, newPassword)
+      .then(() => {
+        if (user) {
+          logOut().then(() => {
+            setUser(null);
+            localStorage.removeItem("token");
+          });
+          toast.success("Password updated successfully");
+        }
+      })
+      .catch((error) => {
+        toast.error(error?.message);
+      });
+
+    try {
+      await axios.put(
+        `https://stride-backend-kappa.vercel.app/api/v1/auth/change-password?id=${id}`,
+        { newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const googleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider).then((data) => {
@@ -161,6 +200,7 @@ const AuthProvider = ({ children }) => {
     updateProfileData,
     signIn,
     logOut,
+    changePassword,
     loading,
     loader,
   };
