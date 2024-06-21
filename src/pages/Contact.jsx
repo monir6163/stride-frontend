@@ -1,7 +1,7 @@
 const Contact = () => {
   return (
-    <div>
-      <div className="bg-gray-100 flex items-center justify-center h-screen">
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-gray-100 flex items-center justify-center h-screen rounded">
         <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Contact Us

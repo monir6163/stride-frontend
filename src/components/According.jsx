@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 const According = () => {
   return (
-    <div className="join join-vertical w-full py-4 px-4">
+    <div className=" container mx-auto px-4 py-8">
       <div className="text-center py-5">
         <div className="join-title text-7xl font-bold">Join us</div>
         <div className="join-subtitle text-xl font-medium">

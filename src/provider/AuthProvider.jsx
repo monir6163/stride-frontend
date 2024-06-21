@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { baseUrl } from "../config/config";
 import { app } from "../firebase/firebase.config";
 
 export const AuthContext = createContext(null);
@@ -35,16 +36,13 @@ const AuthProvider = ({ children }) => {
               email: data?.user?.email,
               password: password,
             };
-            fetch(
-              "https://stride-backend-kappa.vercel.app/api/v1/auth/register",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(userInfo),
-              }
-            )
+            fetch(`${baseUrl}/auth/register`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userInfo),
+            })
               .then((res) => res.json())
               .then((data) => {
                 localStorage.setItem("token", data?.token);
@@ -66,7 +64,7 @@ const AuthProvider = ({ children }) => {
     try {
       setLoader(true);
       const res = await axios.patch(
-        `https://stride-backend-kappa.vercel.app/api/v1/user/userUpdate?id=${id}`,
+        `${baseUrl}/user/userUpdate?id=${id}`,
         data
       );
       setLoader(false);
@@ -113,7 +111,7 @@ const AuthProvider = ({ children }) => {
 
     try {
       await axios.put(
-        `https://stride-backend-kappa.vercel.app/api/v1/auth/change-password?id=${id}`,
+        `${baseUrl}/auth/change-password?id=${id}`,
         { newPassword },
         {
           headers: {
@@ -134,16 +132,13 @@ const AuthProvider = ({ children }) => {
             name: data?.user?.displayName,
             email: data?.user?.email,
           };
-          fetch(
-            "https://stride-backend-kappa.vercel.app/api/v1/auth/register",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(userInfo),
-            }
-          )
+          fetch(`${baseUrl}/auth/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userInfo),
+          })
             .then((res) => res.json())
             .then((data) => {
               localStorage.setItem("token", data?.token);

@@ -1,11 +1,11 @@
-import According from "../components/According";
+import BlogGrid from "../components/BlogGrid";
 
-const Faq = () => {
+const Blog = () => {
   return (
     <div>
-      <According />
+      <BlogGrid />
     </div>
   );
 };
 
-export default Faq;
+export default Blog;

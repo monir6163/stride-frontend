@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../config/config";
 import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
   const { logOut, user } = useAuth();
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
-    fetch(
-      `https://stride-backend-kappa.vercel.app/api/v1/user/userEmail?email=${user?.email}`
-    )
+    fetch(`${baseUrl}/user/userEmail?email=${user?.email}`)
       .then((res) => res.json())
       .then((data) => {
         setUserInfo(data?.user);
@@ -48,7 +47,7 @@ const Navbar = () => {
               <Link to={"/dogs"}>Dogs Shop</Link>
             </li>
             <li>
-              <Link to={"/faq"}>Faq</Link>
+              <Link to={"/blog"}>Blog</Link>
             </li>
             <li>
               <Link to={"/about"}>About</Link>
@@ -96,7 +95,7 @@ const Navbar = () => {
             <Link to={"/dogs"}>Dogs Shop</Link>
           </li>
           <li>
-            <Link to={"/faq"}>Faq</Link>
+            <Link to={"/blog"}>Blog</Link>
           </li>
           <li>
             <Link to={"/about"}>About</Link>

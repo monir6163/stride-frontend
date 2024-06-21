@@ -3,6 +3,7 @@
 import axios from "axios";
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
+import { baseUrl } from "../config/config";
 
 export const DogsContext = createContext(null);
 
@@ -13,15 +14,11 @@ const DogsProvider = ({ children }) => {
   const createDogs = async (data) => {
     setLoader(true);
     try {
-      const res = await axios.post(
-        "https://stride-backend-kappa.vercel.app/api/v1/dog/create",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.post(`${baseUrl}/dog/create`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(res);
       if (res?.data.status === true) {
         toast.success("Dogs created success");
@@ -36,15 +33,11 @@ const DogsProvider = ({ children }) => {
   const updateDogs = async (data, id) => {
     setLoader(true);
     try {
-      const res = await axios.patch(
-        `https://stride-backend-kappa.vercel.app/api/v1/dog/update?id=${id}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.patch(`${baseUrl}/dog/update?id=${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (res?.data.status === true) {
         toast.success("Dogs updated success");
         setLoader(false);
@@ -57,14 +50,11 @@ const DogsProvider = ({ children }) => {
 
   const deleteDogs = async (id, handleFilter) => {
     try {
-      const res = await axios.delete(
-        `https://stride-backend-kappa.vercel.app/api/v1/dog/delete?id=${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.delete(`${baseUrl}/dog/delete?id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (res?.data.status === true) {
         toast.success("Dogs deleted success");
         handleFilter(id);
@@ -74,7 +64,29 @@ const DogsProvider = ({ children }) => {
     }
   };
 
-  const dogsData = { createDogs, updateDogs, deleteDogs, loader };
+  const PlaceOrder = async (data) => {
+    setLoader(true);
+    try {
+      const res = await axios.post(`${baseUrl}/dog/order/create`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res);
+      if (res?.data.status === true) {
+        toast.success("Order created success");
+        setLoader(false);
+        setTimeout(() => {
+          window.location.href = "/thank-you";
+        }, 2000);
+      }
+    } catch (error) {
+      toast.error(error);
+      setLoader(false);
+    }
+  };
+
+  const dogsData = { createDogs, updateDogs, deleteDogs, PlaceOrder, loader };
   return (
     <DogsContext.Provider value={dogsData}>{children}</DogsContext.Provider>
   );

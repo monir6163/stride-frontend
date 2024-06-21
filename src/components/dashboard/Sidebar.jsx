@@ -51,6 +51,18 @@ const Sidebar = () => {
               Add Dogs
             </Link>
           </li>
+          <li className="mb-4">
+            <Link
+              to="/dashboard/allOrders"
+              className={`px-3 py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full flex rounded-sm gap-x-2 items-center justify-start hover:text-white hover:bg-indigo-500 transition-all duration-200 ease-in-out cursor-pointer ${
+                pathname === "/dashboard/allOrders"
+                  ? "bg-indigo-500 text-white"
+                  : "text-[#404040f6] bg-white"
+              }`}
+            >
+              All Orders
+            </Link>
+          </li>
 
           <li className="mb-4">
             <a

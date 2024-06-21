@@ -3,22 +3,29 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import MainLayout from "../layouts/MainLayout";
 import About from "../pages/About";
 
+import BlogDetails from "../components/BlogDetails";
+import { baseUrl } from "../config/config";
+import CheckOut from "../pages/CheckOut";
 import Contact from "../pages/Contact";
 import DogDetails from "../pages/DogDetails";
 import Dogs from "../pages/Dogs";
 import ErrorPage from "../pages/ErrorPage";
-import Faq from "../pages/Faq";
+import Blog from "../pages/Faq";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Registration from "../pages/Registration";
+import Thank from "../pages/Thank";
 import AddDogs from "../pages/dashboard/AddDogs";
 import AllDogs from "../pages/dashboard/AllDogs";
+import AllOrders from "../pages/dashboard/AllOrders";
 import ChangePassword from "../pages/dashboard/ChangePassword";
 import Dashboard from "../pages/dashboard/Dashboard";
 import DetailsDashboard from "../pages/dashboard/DogDetails";
 import EditDogs from "../pages/dashboard/EditDogs";
 import EditProfile from "../pages/dashboard/EditProfile";
 import PrivateRoute from "./private/PrivateRoute";
+
+const token = localStorage.getItem("token");
 
 export const router = createBrowserRouter([
   // frontend routes
@@ -31,26 +38,26 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: () =>
-          fetch("https://stride-backend-kappa.vercel.app/api/v1/dog/getAll"),
+        loader: () => fetch(`${baseUrl}/dog/getAll`),
       },
       {
         path: "/dogs",
         element: <Dogs />,
-        loader: () =>
-          fetch("https://stride-backend-kappa.vercel.app/api/v1/dog/getAll"),
+        loader: () => fetch(`${baseUrl}/dog/getAll`),
       },
       {
         path: "/dogs/:id",
         element: <DogDetails />,
         loader: ({ params }) =>
-          fetch(
-            `https://stride-backend-kappa.vercel.app/api/v1/dog/getSingle?id=${params?.id}`
-          ),
+          fetch(`${baseUrl}/dog/getSingle?id=${params?.id}`),
       },
       {
-        path: "/faq",
-        element: <Faq />,
+        path: "/blog",
+        element: <Blog />,
+      },
+      {
+        path: "/blog/:id",
+        element: <BlogDetails />,
       },
       {
         path: "/about",
@@ -60,6 +67,7 @@ export const router = createBrowserRouter([
         path: "/contact",
         element: <Contact />,
       },
+
       {
         path: "/login",
         element: <Login />,
@@ -67,6 +75,29 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Registration />,
+      },
+      //chekout route
+      {
+        path: "/chekout/:id",
+        element: (
+          <PrivateRoute>
+            <CheckOut />
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`${baseUrl}/dog/getSingle?id=${params?.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+      },
+      {
+        path: "/thank-you",
+        element: (
+          <PrivateRoute>
+            <Thank />
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -92,9 +123,9 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: () =>
-          fetch("https://stride-backend-kappa.vercel.app/api/v1/dog/getAll", {
+          fetch(`${baseUrl}/dog/getAll`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }),
       },
@@ -106,9 +137,11 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://stride-backend-kappa.vercel.app/api/v1/dog/getSingle?id=${params?.id}`
-          ),
+          fetch(`${baseUrl}/dog/getSingle?id=${params?.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
       },
       {
         path: "/dashboard/add-dogs",
@@ -126,9 +159,11 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://stride-backend-kappa.vercel.app/api/v1/dog/getSingle?id=${params?.id}`
-          ),
+          fetch(`${baseUrl}/dog/getSingle?id=${params?.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
       },
       {
         path: "/dashboard/profile/edit/:id",
@@ -138,9 +173,11 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://stride-backend-kappa.vercel.app/api/v1/user/userId?id=${params?.id}`
-          ),
+          fetch(`${baseUrl}/user/userId?id=${params?.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
       },
       {
         path: "/dashboard/profile/change-password/:id",
@@ -150,9 +187,25 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://stride-backend-kappa.vercel.app/api/v1/user/userId?id=${params?.id}`
-          ),
+          fetch(`${baseUrl}/user/userId?id=${params?.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+      },
+      {
+        path: "/dashboard/allOrders",
+        element: (
+          <PrivateRoute>
+            <AllOrders />
+          </PrivateRoute>
+        ),
+        loader: () =>
+          fetch(`${baseUrl}/dog/order/getAll`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
       },
     ],
   },

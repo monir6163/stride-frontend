@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../../config/config";
 import useAuth from "../../hooks/useAuth";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
-    fetch(
-      `https://stride-backend-kappa.vercel.app/api/v1/user/userEmail?email=${user?.email}`
-    )
+    fetch(`${baseUrl}/user/userEmail?email=${user?.email}`)
       .then((res) => res.json())
       .then((data) => {
         setUserInfo(data?.user);

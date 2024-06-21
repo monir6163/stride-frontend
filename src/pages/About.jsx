@@ -1,7 +1,7 @@
-import Abouts from "../components/About";
+import DogsInfo from "../components/dogsInfo";
 
 const About = () => {
-  return <Abouts />;
+  return <DogsInfo />;
 };
 
 export default About;
