@@ -5,6 +5,7 @@ import About from "../pages/About";
 
 import BlogDetails from "../components/BlogDetails";
 import { baseUrl } from "../config/config";
+import Cancel from "../pages/Cancel";
 import CheckOut from "../pages/CheckOut";
 import Contact from "../pages/Contact";
 import DogDetails from "../pages/DogDetails";
@@ -14,6 +15,7 @@ import Blog from "../pages/Faq";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Registration from "../pages/Registration";
+import Success from "../pages/Success";
 import Thank from "../pages/Thank";
 import AddDogs from "../pages/dashboard/AddDogs";
 import AllDogs from "../pages/dashboard/AllDogs";
@@ -75,6 +77,22 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Registration />,
+      },
+      {
+        path: "/success",
+        element: (
+          <PrivateRoute>
+            <Success />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/cancel",
+        element: (
+          <PrivateRoute>
+            <Cancel />
+          </PrivateRoute>
+        ),
       },
       //chekout route
       {

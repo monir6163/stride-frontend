@@ -1,12 +1,13 @@
+import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
+import { baseUrl } from "../config/config";
 import useAuth from "../hooks/useAuth";
-import useDogs from "../hooks/useDogs";
 
 export default function CheckoutForm() {
   const data = useLoaderData();
-  const { PlaceOrder } = useDogs();
   const { user } = useAuth();
+  const token = localStorage.getItem("token");
 
   const [order, setOrder] = useState({
     name: "",
@@ -18,15 +19,32 @@ export default function CheckoutForm() {
     p_name: data?.data?.name,
     p_price: data?.data?.price,
     p_id: data?.data?._id,
+    p_image: data?.data?.image?.url,
   });
 
   const handleInput = (e) => {
     setOrder({ ...order, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await PlaceOrder(order);
+  const makePayment = async () => {
+    console.log(order);
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
+    const response = await fetch(`${baseUrl}/pay/create-checkout-session`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ order }),
+    });
+    const session = await response.json();
+    console.log(session);
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+    if (result.error) {
+      console.log(result.error.message);
+    }
   };
 
   return (
@@ -34,7 +52,7 @@ export default function CheckoutForm() {
       <div className="flex flex-col-reverse md:flex-row justify-around gap-5">
         <div className="w-full md:w-1/2">
           <h1 className="text-2xl font-bold">Billing Details</h1>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-4">
             <input
               type="text"
               placeholder="Full Name"
@@ -85,11 +103,14 @@ export default function CheckoutForm() {
               required
               name="postalCode"
             />
-            <button className="bg-blue-600 text-white p-2 rounded-md">
+            <button
+              className="bg-blue-600 text-white p-2 rounded-md"
+              onClick={makePayment}
+            >
               Place Order
               <span className="ml-2">&#8594;</span>
             </button>
-          </form>
+          </div>
         </div>
         <div className="w-full md:w-1/2">
           <h1 className="text-2xl font-bold">Order Summary</h1>
